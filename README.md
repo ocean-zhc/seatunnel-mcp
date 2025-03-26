@@ -133,4 +133,4 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 
 ## License
 
-MIT 
+Apache License 

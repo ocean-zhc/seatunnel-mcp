@@ -182,4 +182,4 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 
 ## 许可证
 
-MIT 
+Apache License 
