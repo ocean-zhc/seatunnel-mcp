@@ -116,7 +116,8 @@ seatunnel-mcp run
   "mcpServers": {
     "seatunnel": {
       "command": "python",
-      "args": ["-m", "src.seatunnel_mcp"]
+      "args": ["-m", "src.seatunnel_mcp"], 
+       "cwd": "Project root directory"
     }
   }
 }
