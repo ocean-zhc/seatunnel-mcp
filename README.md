@@ -4,6 +4,17 @@ A Model Context Protocol (MCP) server for interacting with SeaTunnel through LLM
 
 ![SeaTunnel MCP Server](./docs/img/seatunnel-mcp-logo.png)
 
+
+## Operation Video
+
+To help you better understand the features and usage of SeaTunnel MCP, we provide a video demonstration. Please refer to the link below or directly check the video file in the project documentation directory.
+
+[SeaTunnel-MCP.mp4](docs/SeaTunnel-MCP.mp4)
+
+> **Tip**: If the video does not play directly, make sure your device supports MP4 format and try opening it with a modern browser or video player.
+：[SeaTunnel-MCP.mp4](docs/SeaTunnel-MCP.mp4)。
+
+
 ## Features
 
 * Job management (submit, stop, monitor)
