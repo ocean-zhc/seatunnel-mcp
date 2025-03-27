@@ -8,7 +8,7 @@ SeaTunnel MCP（Model Context Protocol）服务器，提供与大型语言模型
 
 为了帮助您更好地了解 SeaTunnel MCP 的功能和使用方法，我们提供了一段操作视频演示。请参考以下链接或直接在项目文档目录中查看视频文件。
 
-
+https://www.bilibili.com/video/BV1UXZgY8EqS
 
 > **提示**：如果视频无法直接播放，请确保您的设备支持 MP4 格式，并尝试使用现代浏览器或视频播放器打开。
 
