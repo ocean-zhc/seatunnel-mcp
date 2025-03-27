@@ -9,10 +9,10 @@ A Model Context Protocol (MCP) server for interacting with SeaTunnel through LLM
 
 To help you better understand the features and usage of SeaTunnel MCP, we provide a video demonstration. Please refer to the link below or directly check the video file in the project documentation directory.
 
-[SeaTunnel-MCP.mp4](docs/SeaTunnel-MCP.mp4)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/bA91Vc8WGR8/0.jpg)](https://www.youtube.com/watch?v=bA91Vc8WGR8)
 
-> **Tip**: If the video does not play directly, make sure your device supports MP4 format and try opening it with a modern browser or video player.
-：[SeaTunnel-MCP.mp4](docs/SeaTunnel-MCP.mp4)。
+
+> **Tip**: If the video does not play directly, make sure your device supports MP4 format and try opening it with a modern browser or video player. 
 
 
 ## Features
