@@ -116,7 +116,8 @@ seatunnel-mcp run
   "mcpServers": {
     "seatunnel": {
       "command": "python",
-      "args": ["-m", "src.seatunnel_mcp"]
+      "args": ["-m", "src.seatunnel_mcp"], 
+       "cwd": "Project root directory"
     }
   }
 }
@@ -182,4 +183,4 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 
 ## 许可证
 
-MIT 
+Apache License 

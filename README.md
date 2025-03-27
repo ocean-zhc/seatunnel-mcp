@@ -91,7 +91,8 @@ To use this with Claude Desktop, add the following to your `claude_desktop_confi
   "mcpServers": {
     "seatunnel": {
       "command": "python",
-      "args": ["-m", "src.seatunnel_mcp"]
+      "args": ["-m", "src.seatunnel_mcp"],
+      "cwd": "Project root directory"
     }
   }
 }
@@ -133,4 +134,4 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 
 ## License
 
-MIT 
+Apache License 
