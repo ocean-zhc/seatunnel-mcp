@@ -2,7 +2,9 @@
 
 SeaTunnel MCP（Model Context Protocol）服务器，提供与大型语言模型（如 Claude）交互的能力，使其能够操作 SeaTunnel 任务。
 
-![SeaTunnel MCP Server](./docs/img/seatunnel-mcp-logo.png
+![SeaTunnel MCP Logo](./docs/img/seatunnel-mcp-logo.png)
+
+![SeaTunnel MCP Server](./docs/img/img.png)
 
 ## 操作视频
 

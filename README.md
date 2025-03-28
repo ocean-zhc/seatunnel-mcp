@@ -2,8 +2,9 @@
 
 A Model Context Protocol (MCP) server for interacting with SeaTunnel through LLM interfaces like Claude.
 
-![SeaTunnel MCP Server](./docs/img/seatunnel-mcp-logo.png)
+![SeaTunnel MCP Logo](./docs/img/seatunnel-mcp-logo.png)
 
+![SeaTunnel MCP Server](./docs/img/img.png)
 
 ## Operation Video
 
