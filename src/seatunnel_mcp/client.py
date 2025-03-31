@@ -1,3 +1,19 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 """SeaTunnel API client for interacting with the REST API."""
 
 import json
@@ -39,7 +55,7 @@ class SeaTunnelClient:
         if api_key:
             self.api_key = api_key
             self.headers["Authorization"] = f"Bearer {api_key}" if api_key else None
-        
+
         return self.get_connection_settings()
 
     def get_connection_settings(self) -> Dict[str, Any]:
@@ -70,7 +86,7 @@ class SeaTunnelClient:
         url = f"{self.base_url}{endpoint}"
         headers = kwargs.pop("headers", {})
         headers.update(self.headers)
-        
+
         try:
             with httpx.Client() as client:
                 response = client.request(method, url, headers=headers, **kwargs)
@@ -82,34 +98,34 @@ class SeaTunnelClient:
         except httpx.RequestError as e:
             logger.error(f"Request error: {e}")
             raise
-    
+
     def submit_job(
-        self, 
-        job_content: str, 
-        job_name: Optional[str] = None, 
+        self,
+        job_content: str,
+        jobName: Optional[str] = None,
         jobId: Optional[str] = None,
-        is_start_with_save_point: Optional[bool] = None,
+        isStartWithSavePoint: Optional[bool] = None,
         format: str = "hocon"
     ) -> Dict[str, Any]:
         """Submit a new job.
 
         Args:
             job_content: Job configuration content.
-            job_name: Optional job name.
+            jobName: Optional job name.
             jobId: Optional job ID.
-            is_start_with_save_point: Whether to start with savepoint.
+            isStartWithSavePoint: Whether to start with savepoint.
             format: Job configuration format (hocon, json, yaml).
 
         Returns:
             Response from the API.
         """
         params = {}
-        if job_name:
-            params["jobName"] = job_name
+        if jobName:
+            params["jobName"] = jobName
         if jobId:
             params["jobId"] = jobId
-        if is_start_with_save_point is not None:
-            params["isStartWithSavePoint"] = str(is_start_with_save_point).lower()
+        if isStartWithSavePoint is not None:
+            params["isStartWithSavePoint"] = str(isStartWithSavePoint).lower()
         if format:
             params["format"] = format
 
@@ -120,22 +136,22 @@ class SeaTunnelClient:
             content=job_content,
             headers={"Content-Type": "text/plain"}
         )
-        
+
         return response.json()
 
-    def stop_job(self, jobId: Union[str, int], is_stop_with_save_point: bool = False) -> Dict[str, Any]:
+    def stop_job(self, jobId: Union[str, int], isStartWithSavePoint: bool = False) -> Dict[str, Any]:
         """Stop a running job.
 
         Args:
             jobId: Job ID.
-            is_stop_with_save_point: Whether to stop with savepoint.
+            isStartWithSavePoint: Whether to stop with savepoint.
 
         Returns:
             Response from the API.
         """
         data = {
             "jobId": jobId,
-            "isStopWithSavePoint": is_stop_with_save_point
+            "isStopWithSavePoint": isStartWithSavePoint
         }
         
         response = self._make_request("POST", "/stop-job", json=data)

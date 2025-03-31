@@ -1,3 +1,19 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 """SeaTunnel API 客户端集成测试。
 
 注意：这些测试需要一个运行中的 SeaTunnel 实例。
@@ -82,7 +98,7 @@ def test_get_system_monitoring_information(client):
 
 def test_submit_and_stop_job(client):
     """测试提交和停止作业。
-    
+
     注意：这个测试会提交一个真实的作业，可能会消耗资源。
     """
     # 定义一个简单的测试作业配置
@@ -107,12 +123,12 @@ def test_submit_and_stop_job(client):
       Console {}
     }
     """
-    
+
     try:
         # 提交作业
         submit_response = client.submit_job(
             job_content=job_config,
-            job_name="integration_test_job",
+            jobName="integration_test_job",
             format="hocon"
         )
         assert isinstance(submit_response, dict)
