@@ -89,7 +89,7 @@ def submit_job_tool(client: SeaTunnelClient) -> Callable:
     async def submit_job(
         job_content: str,
         jobName: Optional[str] = None,
-        jobId: Optional[str] = None,
+        jobId: Optional[Union[str, int]] = None,
         isStartWithSavePoint: Optional[bool] = None,
         format: str = "hocon",
     ) -> Dict[str, Any]:
@@ -98,7 +98,7 @@ def submit_job_tool(client: SeaTunnelClient) -> Callable:
         Args:
             job_content: Job configuration content.
             jobName: Optional job name.
-            jobId: Optional job ID.
+            jobId: Optional job ID. Can be a string or integer, will be converted to string.
             isStartWithSavePoint: Whether to start with savepoint.
             format: Job configuration format (hocon, json, yaml).
 
@@ -118,6 +118,51 @@ def submit_job_tool(client: SeaTunnelClient) -> Callable:
     submit_job.__doc__ = "Submit a new job to the SeaTunnel cluster with configuration content"
 
     return submit_job
+
+
+def submit_job_upload_tool(client: SeaTunnelClient) -> Callable:
+    """Get a tool for submitting a job using file upload.
+
+    Args:
+        client: SeaTunnel client instance.
+
+    Returns:
+        Function that can be registered as a tool.
+    """
+    async def submit_job_upload(
+        config_file: Union[str, Any],
+        jobName: Optional[str] = None,
+        jobId: Optional[Union[str, int]] = None,
+        isStartWithSavePoint: Optional[bool] = None,
+        format: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Submit a new job using file upload.
+
+        Args:
+            config_file: Either a file path string or a file-like object. If a path string is provided, 
+                        the file will be opened and submitted in the multipart/form-data request body.
+            jobName: Optional job name (sent as a query parameter).
+            jobId: Optional job ID (sent as a query parameter). Can be a string or integer, will be converted to string.
+            isStartWithSavePoint: Whether to start with savepoint (sent as a query parameter).
+            format: Job configuration format (hocon, json, yaml) (sent as a query parameter).
+                   If not provided, it will be determined from the file name.
+
+        Returns:
+            Response from the API.
+        """
+        result = client.submit_job_upload(
+            config_file=config_file,
+            jobName=jobName,
+            jobId=jobId,
+            isStartWithSavePoint=isStartWithSavePoint,
+            format=format,
+        )
+        return result
+
+    submit_job_upload.__name__ = "submit-job-upload"
+    submit_job_upload.__doc__ = "Submit a new job to the SeaTunnel cluster by uploading a configuration file"
+
+    return submit_job_upload
 
 
 def submit_jobs_tool(client: SeaTunnelClient) -> Callable:
@@ -347,6 +392,7 @@ def get_all_tools(client: SeaTunnelClient) -> List[Callable]:
         get_connection_settings_tool(client),
         update_connection_settings_tool(client),
         submit_job_tool(client),
+        submit_job_upload_tool(client),
         submit_jobs_tool(client),
         stop_job_tool(client),
         get_job_info_tool(client),

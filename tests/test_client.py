@@ -136,4 +136,114 @@ def test_submit_jobs(mock_client, client):
         json=request_body,
     )
     
-    assert result == {"jobIds": ["123", "456"]} 
+    assert result == {"jobIds": ["123", "456"]}
+
+
+@patch("httpx.Client")
+def test_submit_job_upload(mock_client, client):
+    """Test submit_job_upload."""
+    mock_response = MagicMock()
+    mock_response.json.return_value = {"jobId": "123"}
+    mock_response.raise_for_status.return_value = None
+
+    mock_client_instance = MagicMock()
+    mock_client_instance.request.return_value = mock_response
+    mock_client.return_value.__enter__.return_value = mock_client_instance
+
+    # Mock file-like object
+    config_file = MagicMock()
+    config_file.name = "test_job.conf"
+    
+    result = client.submit_job_upload(
+        config_file=config_file,
+        jobName="test_job",
+    )
+
+    mock_client_instance.request.assert_called_once_with(
+        "POST",
+        "http://localhost:8090/submit-job/upload",
+        headers={
+            "Authorization": "Bearer test_key",
+        },
+        params={"jobName": "test_job"},
+        files={'config_file': config_file},
+    )
+    
+    assert result == {"jobId": "123"}
+
+
+@patch("httpx.Client")
+def test_submit_job_upload_json(mock_client, client):
+    """Test submit_job_upload with JSON file."""
+    mock_response = MagicMock()
+    mock_response.json.return_value = {"jobId": "123"}
+    mock_response.raise_for_status.return_value = None
+
+    mock_client_instance = MagicMock()
+    mock_client_instance.request.return_value = mock_response
+    mock_client.return_value.__enter__.return_value = mock_client_instance
+
+    # Mock file-like object with json extension
+    config_file = MagicMock()
+    config_file.name = "test_job.json"
+    
+    result = client.submit_job_upload(
+        config_file=config_file,
+        jobName="test_job",
+        format="json",  # Explicitly specify format
+    )
+
+    mock_client_instance.request.assert_called_once_with(
+        "POST",
+        "http://localhost:8090/submit-job/upload",
+        headers={
+            "Authorization": "Bearer test_key",
+        },
+        params={"jobName": "test_job", "format": "json"},
+        files={'config_file': config_file},
+    )
+    
+    assert result == {"jobId": "123"}
+
+
+@patch("httpx.Client")
+@patch("builtins.open")
+def test_submit_job_upload_path(mock_open, mock_client, client):
+    """Test submit_job_upload with a file path."""
+    mock_response = MagicMock()
+    mock_response.json.return_value = {"jobId": "123"}
+    mock_response.raise_for_status.return_value = None
+
+    mock_client_instance = MagicMock()
+    mock_client_instance.request.return_value = mock_response
+    mock_client.return_value.__enter__.return_value = mock_client_instance
+    
+    # Mock the file object returned by open()
+    mock_file = MagicMock()
+    mock_open.return_value = mock_file
+    
+    file_path = "/path/to/test_job.conf"
+    result = client.submit_job_upload(
+        config_file=file_path,
+        jobName="test_job",
+        jobId="987654321",
+    )
+
+    # Check that open was called with the file path
+    mock_open.assert_called_once_with(file_path, 'rb')
+    
+    # Check that the request was made with the proper parameters
+    mock_client_instance.request.assert_called_once_with(
+        "POST",
+        "http://localhost:8090/submit-job/upload",
+        headers={
+            "Authorization": "Bearer test_key",
+        },
+        params={"jobName": "test_job", "jobId": "987654321"},
+        files={'config_file': mock_file},
+    )
+    
+    # Verify the mock file was closed after the request
+    mock_file.close.assert_called_once()
+    
+    assert result == {"jobId": "123"} 

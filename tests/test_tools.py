@@ -24,6 +24,8 @@ from src.seatunnel_mcp.tools import (
     get_connection_settings_tool,
     update_connection_settings_tool,
     submit_job_tool,
+    submit_job_upload_tool,
+    submit_jobs_tool,
     stop_job_tool,
     get_job_info_tool,
     get_running_job_tool,
@@ -32,7 +34,6 @@ from src.seatunnel_mcp.tools import (
     get_overview_tool,
     get_system_monitoring_information_tool,
     get_all_tools,
-    submit_jobs_tool,
 )
 
 
@@ -49,6 +50,8 @@ def mock_client():
         "has_api_key": True,
     }
     client.submit_job.return_value = {"jobId": "123"}
+    client.submit_job_upload.return_value = {"jobId": "123"}
+    client.submit_jobs.return_value = {"jobIds": ["123", "456"]}
     client.stop_job.return_value = {"status": "success"}
     client.get_job_info.return_value = {"jobId": "123", "status": "RUNNING"}
     client.get_running_job.return_value = {"jobId": "123", "status": "RUNNING"}
@@ -109,6 +112,52 @@ async def test_submit_job_tool(mock_client):
 
 
 @pytest.mark.asyncio
+async def test_submit_job_upload_tool(mock_client):
+    """Test submit_job_upload_tool."""
+    tool = submit_job_upload_tool(mock_client)
+    assert tool.name == "submit-job-upload"
+    
+    # Mock file-like object
+    config_file = MagicMock()
+    config_file.name = "test_job.conf"
+    
+    result = await tool.fn(
+        config_file=config_file,
+        jobName="test_job",
+    )
+    mock_client.submit_job_upload.assert_called_once_with(
+        config_file=config_file,
+        jobName="test_job",
+        jobId=None,
+        isStartWithSavePoint=None,
+        format=None,
+    )
+    assert result == {"jobId": "123"}
+
+
+@pytest.mark.asyncio
+async def test_submit_job_upload_tool_path(mock_client):
+    """Test submit_job_upload_tool with a file path."""
+    tool = submit_job_upload_tool(mock_client)
+    assert tool.name == "submit-job-upload"
+    
+    file_path = "/path/to/config.conf"
+    result = await tool.fn(
+        config_file=file_path,
+        jobName="test_job",
+        jobId="987654321",
+    )
+    mock_client.submit_job_upload.assert_called_once_with(
+        config_file=file_path,
+        jobName="test_job",
+        jobId="987654321",
+        isStartWithSavePoint=None,
+        format=None,
+    )
+    assert result == {"jobId": "123"}
+
+
+@pytest.mark.asyncio
 async def test_submit_jobs_tool(mock_client):
     """Test submit_jobs_tool."""
     # Set up return value for submit_jobs
@@ -159,7 +208,7 @@ async def test_stop_job_tool(mock_client):
 def test_get_all_tools(mock_client):
     """Test get_all_tools."""
     tools = get_all_tools(mock_client)
-    assert len(tools) == 11
+    assert len(tools) == 12
     tool_names = [tool.__name__ for tool in tools]
     assert "get-connection-settings" in tool_names
     assert "update-connection-settings" in tool_names

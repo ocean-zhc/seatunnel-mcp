@@ -19,6 +19,15 @@
 from typing import Dict, List, Any, Optional, Union
 from pydantic import BaseModel, Field
 
+__all__ = [
+    "ConnectionSettings",
+    "SubmitJobRequest",
+    "SubmitJobUploadRequest",
+    "SubmitJobsRequest",
+    "StopJobRequest",
+    "JobStateType",
+]
+
 
 class ConnectionSettings(BaseModel):
     """Connection settings for the SeaTunnel API."""
@@ -39,9 +48,25 @@ class SubmitJobRequest(BaseModel):
 
     job_content: str = Field(..., description="Job configuration content in specified format")
     jobName: Optional[str] = Field(None, description="Optional job name")
-    jobId: Optional[str] = Field(None, description="Optional job ID")
+    jobId: Optional[Union[str, int]] = Field(None, description="Optional job ID. Can be a string or integer.")
     is_start_with_save_point: Optional[bool] = Field(None, description="Whether to start with savepoint")
     format: str = Field("hocon", description="Job configuration format (hocon, json, yaml)")
+
+
+class SubmitJobUploadRequest(BaseModel):
+    """Request for submitting a job via file upload."""
+
+    config_file: Union[str, Any] = Field(..., description="Configuration file path or file object (multipart/form-data body parameter)")
+    jobName: Optional[str] = Field(None, description="Optional job name (query parameter)")
+    jobId: Optional[Union[str, int]] = Field(None, description="Optional job ID (query parameter). Can be a string or integer.")
+    is_start_with_save_point: Optional[bool] = Field(None, description="Whether to start with savepoint (query parameter)")
+    format: Optional[str] = Field(None, description="Job configuration format (hocon, json, yaml) (query parameter). If not provided, determined from the file name")
+
+
+class SubmitJobsRequest(BaseModel):
+    """Request for submitting multiple jobs in batch."""
+
+    request_body: Any = Field(..., description="Direct request body to send to the API")
 
 
 class StopJobRequest(BaseModel):

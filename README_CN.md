@@ -200,7 +200,7 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 
 ### v1.1.0 (2025-04-10)
 
-- **新功能**：添加了 `submit-jobs` 工具用于批量提交作业
+- **新功能**：添加了 `submit-jobs` 和`submit-job/upload` 工具用于批量提交作业 和 文件提交作业
   - 允许通过单个 API 调用同时提交多个作业
   - 用户输入直接作为请求体传递给 API
   - 支持 JSON 格式的作业配置

@@ -85,7 +85,18 @@ class SeaTunnelClient:
         """
         url = f"{self.base_url}{endpoint}"
         headers = kwargs.pop("headers", {})
-        headers.update(self.headers)
+        
+        # Don't add the default Content-Type header if we're uploading files
+        if "files" not in kwargs:
+            # Create a new dictionary with self.headers as the base
+            merged_headers = dict(self.headers)
+            # If custom headers exist, they override the default ones
+            merged_headers.update(headers)
+            headers = merged_headers
+        else:
+            # Only add the Authorization header when using files
+            if "Authorization" in self.headers:
+                headers["Authorization"] = self.headers["Authorization"]
 
         try:
             with httpx.Client() as client:
@@ -122,8 +133,8 @@ class SeaTunnelClient:
         params = {}
         if jobName:
             params["jobName"] = jobName
-        if jobId:
-            params["jobId"] = jobId
+        if jobId is not None:
+            params["jobId"] = str(jobId)  # Convert jobId to string
         if isStartWithSavePoint is not None:
             params["isStartWithSavePoint"] = str(isStartWithSavePoint).lower()
         if format:
@@ -131,7 +142,7 @@ class SeaTunnelClient:
 
         response = self._make_request(
             "POST",
-            "",
+            "/submit-job",
             params=params,
             content=job_content,
             headers={"Content-Type": "text/plain"}
@@ -159,6 +170,62 @@ class SeaTunnelClient:
         )
         
         return response.json()
+
+    def submit_job_upload(
+        self,
+        config_file: Union[str, Any],
+        jobName: Optional[str] = None,
+        jobId: Optional[Union[str, int]] = None,
+        isStartWithSavePoint: Optional[bool] = None,
+        format: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Submit a new job using file upload.
+
+        Args:
+            config_file: Either a file path string or a file-like object. If a path string is provided, 
+                        the file will be opened and submitted in the multipart/form-data request body.
+            jobName: Optional job name (sent as a query parameter).
+            jobId: Optional job ID (sent as a query parameter). Can be a string or integer, will be converted to string.
+            isStartWithSavePoint: Whether to start with savepoint (sent as a query parameter).
+            format: Job configuration format (hocon, json, yaml) (sent as a query parameter).
+                   If not provided, it will be determined from the file name.
+
+        Returns:
+            Response from the API.
+        """
+        params = {}
+        if jobName:
+            params["jobName"] = jobName
+        if jobId is not None:
+            params["jobId"] = str(jobId)  # Convert jobId to string
+        if isStartWithSavePoint is not None:
+            params["isStartWithSavePoint"] = str(isStartWithSavePoint).lower()
+        
+        if format:
+            params["format"] = format
+            
+        # If config_file is a string, assume it's a file path and open the file
+        file_to_close = None
+        try:
+            if isinstance(config_file, str):
+                file_to_close = open(config_file, 'rb')
+                files = {'config_file': file_to_close}
+            else:
+                # Assume it's already a file-like object
+                files = {'config_file': config_file}
+            
+            response = self._make_request(
+                "POST",
+                "/submit-job/upload",
+                params=params,
+                files=files
+            )
+            
+            return response.json()
+        finally:
+            # Ensure we close the file if we opened it
+            if file_to_close:
+                file_to_close.close()
 
     def stop_job(self, jobId: Union[str, int], isStartWithSavePoint: bool = False) -> Dict[str, Any]:
         """Stop a running job.
