@@ -91,6 +91,74 @@ When interacting with Claude, you can use these tools through natural language:
   }
   ```
 
+- **Submit multiple jobs in batch**: Ask Claude to submit multiple jobs at once. Your input will be sent directly as the API request body.
+  
+  Example:
+  ```
+  Please submit these jobs in batch:
+  
+  [
+    {
+      "params": {
+        "jobId": "123456",
+        "jobName": "Job-1"
+      },
+      "env": {
+        "job.mode": "batch"
+      },
+      "source": [
+        {
+          "plugin_name": "FakeSource",
+          "plugin_output": "fake",
+          "row.num": 1000,
+          "schema": {
+            "fields": {
+              "name": "string",
+              "age": "int"
+            }
+          }
+        }
+      ],
+      "transform": [],
+      "sink": [
+        {
+          "plugin_name": "Console",
+          "plugin_input": ["fake"]
+        }
+      ]
+    },
+    {
+      "params": {
+        "jobId": "789012",
+        "jobName": "Job-2"
+      },
+      "env": {
+        "job.mode": "batch"
+      },
+      "source": [
+        {
+          "plugin_name": "FakeSource",
+          "plugin_output": "fake",
+          "row.num": 500,
+          "schema": {
+            "fields": {
+              "id": "int",
+              "value": "string"
+            }
+          }
+        }
+      ],
+      "transform": [],
+      "sink": [
+        {
+          "plugin_name": "Console",
+          "plugin_input": ["fake"]
+        }
+      ]
+    }
+  ]
+  ```
+
 - **Stop a job**: Ask Claude to stop a running job.
   
   Example: "Please stop job with ID 12345"

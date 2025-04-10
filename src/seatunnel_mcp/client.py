@@ -131,12 +131,33 @@ class SeaTunnelClient:
 
         response = self._make_request(
             "POST",
-            "/submit-job",
+            "",
             params=params,
             content=job_content,
             headers={"Content-Type": "text/plain"}
         )
 
+        return response.json()
+
+    def submit_jobs(
+        self, 
+        request_body: Any
+    ) -> Dict[str, Any]:
+        """Submit multiple jobs in batch.
+
+        Args:
+            request_body: The direct request body to send to the API.
+                It will be used as-is without modification.
+
+        Returns:
+            Response from the API.
+        """
+        response = self._make_request(
+            "POST",
+            "/submit-jobs",
+            json=request_body,
+        )
+        
         return response.json()
 
     def stop_job(self, jobId: Union[str, int], isStartWithSavePoint: bool = False) -> Dict[str, Any]:

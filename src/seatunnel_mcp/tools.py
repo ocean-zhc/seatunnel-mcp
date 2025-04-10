@@ -120,6 +120,36 @@ def submit_job_tool(client: SeaTunnelClient) -> Callable:
     return submit_job
 
 
+def submit_jobs_tool(client: SeaTunnelClient) -> Callable:
+    """Get a tool for submitting multiple jobs in batch.
+
+    Args:
+        client: SeaTunnel client instance.
+
+    Returns:
+        Function that can be registered as a tool.
+    """
+    async def submit_jobs(
+        request_body: Any
+    ) -> Dict[str, Any]:
+        """Submit multiple jobs in batch.
+
+        Args:
+            request_body: The direct request body to send to the API.
+                It will be used as-is without modification.
+
+        Returns:
+            Response from the API.
+        """
+        result = client.submit_jobs(request_body=request_body)
+        return result
+
+    submit_jobs.__name__ = "submit-jobs"
+    submit_jobs.__doc__ = "Submit multiple jobs in batch to the SeaTunnel cluster. The input will be sent directly as the request body."
+
+    return submit_jobs
+
+
 def stop_job_tool(client: SeaTunnelClient) -> Callable:
     """Get a tool for stopping a running job.
 
@@ -317,6 +347,7 @@ def get_all_tools(client: SeaTunnelClient) -> List[Callable]:
         get_connection_settings_tool(client),
         update_connection_settings_tool(client),
         submit_job_tool(client),
+        submit_jobs_tool(client),
         stop_job_tool(client),
         get_job_info_tool(client),
         get_running_job_tool(client),

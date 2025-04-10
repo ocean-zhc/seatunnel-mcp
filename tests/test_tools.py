@@ -32,6 +32,7 @@ from src.seatunnel_mcp.tools import (
     get_overview_tool,
     get_system_monitoring_information_tool,
     get_all_tools,
+    submit_jobs_tool,
 )
 
 
@@ -101,20 +102,69 @@ async def test_submit_job_tool(mock_client):
         job_content=job_content,
         jobName="test_job",
         jobId=None,
-        is_start_with_save_point=None,
+        isStartWithSavePoint=None,
         format="hocon",
     )
     assert result == {"jobId": "123"}
 
 
+@pytest.mark.asyncio
+async def test_submit_jobs_tool(mock_client):
+    """Test submit_jobs_tool."""
+    # Set up return value for submit_jobs
+    mock_client.submit_jobs.return_value = {"jobIds": ["123", "456"]}
+    
+    # Create the tool
+    tool = submit_jobs_tool(mock_client)
+    assert tool.name == "submit-jobs"
+    
+    # 直接作为请求体的任意数据
+    request_body = [
+        {
+            "params": {"jobId": "123", "jobName": "job-1"},
+            "env": {"job.mode": "batch"},
+            "source": [{"plugin_name": "FakeSource", "plugin_output": "fake"}],
+            "transform": [],
+            "sink": [{"plugin_name": "Console", "plugin_input": ["fake"]}]
+        },
+        {
+            "params": {"jobId": "456", "jobName": "job-2"},
+            "env": {"job.mode": "batch"},
+            "source": [{"plugin_name": "FakeSource", "plugin_output": "fake"}],
+            "transform": [],
+            "sink": [{"plugin_name": "Console", "plugin_input": ["fake"]}]
+        }
+    ]
+    
+    # Call the tool
+    result = await tool.fn(request_body=request_body)
+    
+    # Verify the client method was called correctly
+    mock_client.submit_jobs.assert_called_once_with(request_body=request_body)
+    
+    # Check the result
+    assert result == {"jobIds": ["123", "456"]}
+
+
+@pytest.mark.asyncio
+async def test_stop_job_tool(mock_client):
+    """Test stop_job_tool."""
+    tool = stop_job_tool(mock_client)
+    assert tool.name == "stop-job"
+    result = await tool.fn(jobId="123")
+    mock_client.stop_job.assert_called_once_with(jobId="123")
+    assert result == {"status": "success"}
+
+
 def test_get_all_tools(mock_client):
     """Test get_all_tools."""
     tools = get_all_tools(mock_client)
-    assert len(tools) == 10
+    assert len(tools) == 11
     tool_names = [tool.__name__ for tool in tools]
     assert "get-connection-settings" in tool_names
     assert "update-connection-settings" in tool_names
     assert "submit-job" in tool_names
+    assert "submit-jobs" in tool_names
     assert "stop-job" in tool_names
     assert "get-job-info" in tool_names
     assert "get-running-job" in tool_names

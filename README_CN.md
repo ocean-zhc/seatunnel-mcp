@@ -104,6 +104,7 @@ MCP 使用示例：
 服务器提供工具来提交和管理 SeaTunnel 作业：
 
 * `submit-job`：提交新作业
+* `submit-jobs`：批量提交多个作业
 * `stop-job`：停止运行中的作业
 * `get-job-info`：获取特定作业的详细信息
 * `get-running-jobs`：列出所有正在运行的作业
@@ -150,6 +151,7 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 ### 作业管理
 
 * `submit-job`：提交新作业
+* `submit-jobs`：批量提交多个作业，直接将用户输入作为请求体传递
 * `stop-job`：停止运行中的作业
 * `get-job-info`：获取特定作业的详细信息
 * `get-running-jobs`：列出所有正在运行的作业
@@ -160,6 +162,8 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 
 * `get-overview`：获取 SeaTunnel 集群概览
 * `get-system-monitoring-information`：获取详细的系统监控信息
+
+
 
 ## 开发
 
@@ -191,6 +195,22 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 2. 创建功能分支
 3. 提交变更
 4. 创建 Pull Request
+
+## 更新日志
+
+### v1.1.0 (2025-04-10)
+
+- **新功能**：添加了 `submit-jobs` 工具用于批量提交作业
+  - 允许通过单个 API 调用同时提交多个作业
+  - 用户输入直接作为请求体传递给 API
+  - 支持 JSON 格式的作业配置
+
+### v1.0.0 (初始版本)
+
+- 初始版本，具备基本的 SeaTunnel 集成能力
+- 作业管理工具（提交、停止、监控）
+- 系统监控工具
+- 连接配置实用工具
 
 ## 许可证
 

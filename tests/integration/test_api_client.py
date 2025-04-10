@@ -155,4 +155,85 @@ def test_submit_and_stop_job(client):
     except httpx.HTTPStatusError as e:
         if e.response.status_code == 404:
             pytest.skip("submit_job 或 stop_job 端点不可用")
+        raise
+
+
+def test_submit_jobs(client):
+    """测试批量提交作业。
+
+    注意：这个测试会提交真实的作业，可能会消耗资源。
+    """
+    # 定义两个简单的测试作业作为请求体
+    request_body = [
+        {
+            "params": {
+                "jobId": "batch_test_1",
+                "jobName": "batch_test_job_1"
+            },
+            "env": {
+                "job.mode": "batch"
+            },
+            "source": [
+                {
+                    "plugin_name": "FakeSource",
+                    "plugin_output": "fake",
+                    "row.num": 10,
+                    "schema": {
+                        "fields": {
+                            "id": "int",
+                            "name": "string"
+                        }
+                    }
+                }
+            ],
+            "transform": [],
+            "sink": [
+                {
+                    "plugin_name": "Console",
+                    "plugin_input": ["fake"]
+                }
+            ]
+        },
+        {
+            "params": {
+                "jobId": "batch_test_2",
+                "jobName": "batch_test_job_2"
+            },
+            "env": {
+                "job.mode": "batch"
+            },
+            "source": [
+                {
+                    "plugin_name": "FakeSource",
+                    "plugin_output": "fake",
+                    "row.num": 10,
+                    "schema": {
+                        "fields": {
+                            "id": "int",
+                            "name": "string"
+                        }
+                    }
+                }
+            ],
+            "transform": [],
+            "sink": [
+                {
+                    "plugin_name": "Console",
+                    "plugin_input": ["fake"]
+                }
+            ]
+        }
+    ]
+
+    try:
+        # 批量提交作业
+        submit_response = client.submit_jobs(request_body=request_body)
+        assert isinstance(submit_response, dict)
+        
+        # 验证响应包含作业ID
+        assert "jobIds" in submit_response or "jobs" in submit_response
+        
+    except httpx.HTTPStatusError as e:
+        if e.response.status_code == 404:
+            pytest.skip("submit_jobs 端点不可用")
         raise 

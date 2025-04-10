@@ -92,4 +92,48 @@ def test_submit_job(mock_client, client):
         content=job_content,
     )
     
-    assert result == {"jobId": "123"} 
+    assert result == {"jobId": "123"}
+
+
+@patch("httpx.Client")
+def test_submit_jobs(mock_client, client):
+    """Test submit_jobs."""
+    mock_response = MagicMock()
+    mock_response.json.return_value = {"jobIds": ["123", "456"]}
+    mock_response.raise_for_status.return_value = None
+
+    mock_client_instance = MagicMock()
+    mock_client_instance.request.return_value = mock_response
+    mock_client.return_value.__enter__.return_value = mock_client_instance
+
+    # 直接作为请求体的任意数据
+    request_body = [
+        {
+            "params": {"jobId": "123", "jobName": "job-1"},
+            "env": {"job.mode": "batch"},
+            "source": [{"plugin_name": "FakeSource", "plugin_output": "fake"}],
+            "transform": [],
+            "sink": [{"plugin_name": "Console", "plugin_input": ["fake"]}]
+        },
+        {
+            "params": {"jobId": "456", "jobName": "job-2"},
+            "env": {"job.mode": "batch"},
+            "source": [{"plugin_name": "FakeSource", "plugin_output": "fake"}],
+            "transform": [],
+            "sink": [{"plugin_name": "Console", "plugin_input": ["fake"]}]
+        }
+    ]
+    
+    result = client.submit_jobs(request_body=request_body)
+
+    mock_client_instance.request.assert_called_once_with(
+        "POST",
+        "http://localhost:8090/submit-jobs",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer test_key",
+        },
+        json=request_body,
+    )
+    
+    assert result == {"jobIds": ["123", "456"]} 

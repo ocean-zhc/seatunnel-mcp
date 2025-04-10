@@ -85,6 +85,7 @@ Example usage through MCP:
 The server provides tools to submit and manage SeaTunnel jobs:
 
 * `submit-job`: Submit a new job with job configuration
+* `submit-jobs`: Submit multiple jobs in batch
 * `stop-job`: Stop a running job
 * `get-job-info`: Get detailed information about a specific job
 * `get-running-jobs`: List all currently running jobs
@@ -128,6 +129,7 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 ### Job Management
 
 * `submit-job`: Submit a new job with configuration in HOCON format
+* `submit-jobs`: Submit multiple jobs in batch, directly passing user input as request body
 * `stop-job`: Stop a running job with optional savepoint
 * `get-job-info`: Get detailed information about a specific job
 * `get-running-jobs`: List all currently running jobs
@@ -139,12 +141,21 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 * `get-overview`: Get an overview of the SeaTunnel cluster
 * `get-system-monitoring-information`: Get detailed system monitoring information
 
-## Contributing
+## Changelog
 
-1. Fork repository
-2. Create feature branch
-3. Commit changes
-4. Create pull request
+### v1.1.0 (2025-04-10)
+
+- **New Feature**: Added `submit-jobs` tool for batch job submission
+  - Allows submitting multiple jobs at once with a single API call
+  - Input is passed directly as the request body to the API
+  - Supports JSON format for job configurations
+
+### v1.0.0 (Initial Release)
+
+- Initial release with basic SeaTunnel integration capabilities
+- Job management tools (submit, stop, monitor)
+- System monitoring tools
+- Connection configuration utilities
 
 ## License
 
