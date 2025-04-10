@@ -204,6 +204,7 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
   - 允许通过单个 API 调用同时提交多个作业
   - 用户输入直接作为请求体传递给 API
   - 支持 JSON 格式的作业配置
+  - 允许根据文件提交作业
 
 ### v1.0.0 (初始版本)
 

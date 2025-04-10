@@ -149,6 +149,7 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
   - Allows submitting multiple jobs at once with a single API call
   - Input is passed directly as the request body to the API
   - Supports JSON format for job configurations
+  - Allow submission of jobs based on documents
 
 ### v1.0.0 (Initial Release)
 
