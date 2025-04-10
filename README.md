@@ -129,6 +129,7 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 ### Job Management
 
 * `submit-job`: Submit a new job with configuration in HOCON format
+* `submit-job/upload`: submit job source upload configuration file
 * `submit-jobs`: Submit multiple jobs in batch, directly passing user input as request body
 * `stop-job`: Stop a running job with optional savepoint
 * `get-job-info`: Get detailed information about a specific job

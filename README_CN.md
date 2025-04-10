@@ -152,6 +152,7 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 
 * `submit-job`：提交新作业
 * `submit-jobs`：批量提交多个作业，直接将用户输入作为请求体传递
+* `submit-job/upload`：提交作业来源上传配置文件
 * `stop-job`：停止运行中的作业
 * `get-job-info`：获取特定作业的详细信息
 * `get-running-jobs`：列出所有正在运行的作业
