@@ -180,6 +180,88 @@
         "security": []
       }
     },
+    "/submit-job/upload": {
+      "post": {
+        "summary": "提交作业来源上传配置文件",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "jobName",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "hive2es_qymp_file",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isStartWithSavePoint",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "hocon",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "config_file": {
+                    "format": "binary",
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
     "/overview": {
       "get": {
         "summary": "返回Zeta集群的概览",
