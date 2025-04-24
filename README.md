@@ -42,7 +42,7 @@ pip install -e .
 
 ## Requirements
 
-* Python ≥ 3.9
+* Python ≥ 3.12
 * Running SeaTunnel instance
 * Node.js (for testing with MCP Inspector)
 

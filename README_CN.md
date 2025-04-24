@@ -43,7 +43,7 @@ run.bat   # Windows
 
 ## 系统要求
 
-* Python ≥ 3.9
+* Python ≥ 3.12
 * 运行中的 SeaTunnel 实例
 * Node.js（用于 MCP Inspector 测试）
 
