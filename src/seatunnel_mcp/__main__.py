@@ -40,6 +40,7 @@ load_dotenv()
 # Default values
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8080
+DEFAULT_TRANSPORT = "sse"  # Default to SSE
 DEFAULT_API_URL = "http://localhost:8090"  # Default SeaTunnel API URL
 
 
@@ -48,6 +49,7 @@ def main():
     # Get configuration from environment
     host = os.environ.get("MCP_HOST", DEFAULT_HOST)
     port = int(os.environ.get("MCP_PORT", DEFAULT_PORT))
+    transport = os.environ.get("MCP_TRANSPORT", DEFAULT_TRANSPORT)
     api_url = os.environ.get("SEATUNNEL_API_URL", DEFAULT_API_URL)
     api_key = os.environ.get("SEATUNNEL_API_KEY", None)
 
@@ -70,9 +72,9 @@ def main():
         server.add_tool(tool_fn)
 
     # Run server
-    logger.info(f"Starting SeaTunnel MCP server at http://{host}:{port}")
-    server.run()
+    logger.info(f"Starting SeaTunnel MCP server with {transport.upper()} transport at http://{host}:{port}")
+    server.run(transport=transport)
 
 
 if __name__ == "__main__":
-    main() 
+    main()
