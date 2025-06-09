@@ -99,7 +99,7 @@ class SeaTunnelClient:
                 headers["Authorization"] = self.headers["Authorization"]
 
         try:
-            with httpx.Client() as client:
+            with httpx.Client(timeout=60.0) as client:
                 response = client.request(method, url, headers=headers, **kwargs)
                 response.raise_for_status()
                 return response

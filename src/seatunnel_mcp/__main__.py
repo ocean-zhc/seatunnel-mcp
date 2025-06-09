@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 # Default values
-DEFAULT_HOST = "127.0.0.1"
+DEFAULT_HOST = "0.0.0.0"
 DEFAULT_PORT = 8080
 DEFAULT_TRANSPORT = "sse"  # Default to SSE
 DEFAULT_API_URL = "http://localhost:8090"  # Default SeaTunnel API URL
