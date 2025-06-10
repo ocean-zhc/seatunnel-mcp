@@ -39,7 +39,7 @@ load_dotenv()
 
 # Default values
 DEFAULT_HOST = "127.0.0.1"
-DEFAULT_PORT = 8080
+DEFAULT_PORT = 8081
 DEFAULT_API_URL = "http://localhost:8090"  # Default SeaTunnel API URL
 
 

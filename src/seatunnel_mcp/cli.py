@@ -141,21 +141,20 @@ def main() -> None:
     parser.add_argument("-v", "--version", action="store_true", help="显示版本信息")
     parser.add_argument("--log-level", choices=["debug", "info", "warning", "error", "critical"],
                       default="info", help="设置日志级别 (默认: info)")
+    parser.add_argument("--host", help="监听主机 (默认: 从环境变量获取)")
+    parser.add_argument("--port", type=int, help="监听端口 (默认: 从环境变量获取)")
+    parser.add_argument("--api-url", help="SeaTunnel API URL (默认: 从环境变量获取)")
+    parser.add_argument("--api-key", help="SeaTunnel API 密钥 (默认: 从环境变量获取)")
+    parser.add_argument("--env-file", help="环境变量文件路径 (默认: .env)")
     
     # 子命令
     subparsers = parser.add_subparsers(dest="command", help="命令")
     
     # 运行服务器
     run_parser = subparsers.add_parser("run", help="运行 MCP 服务器")
-    run_parser.add_argument("--host", help="监听主机 (默认: 从环境变量获取)")
-    run_parser.add_argument("--port", type=int, help="监听端口 (默认: 从环境变量获取)")
-    run_parser.add_argument("--api-url", help="SeaTunnel API URL (默认: 从环境变量获取)")
-    run_parser.add_argument("--api-key", help="SeaTunnel API 密钥 (默认: 从环境变量获取)")
-    run_parser.add_argument("--env-file", help="环境变量文件路径 (默认: .env)")
     
     # 初始化环境变量文件
     init_parser = subparsers.add_parser("init", help="初始化环境变量文件")
-    init_parser.add_argument("--env-file", default=".env", help="环境变量文件路径 (默认: .env)")
     
     # 为 Claude Desktop 配置 MCP
     claude_parser = subparsers.add_parser("configure-claude", help="为 Claude Desktop 配置 MCP 服务器")
@@ -172,7 +171,7 @@ def main() -> None:
         return
     
     # 处理命令
-    if args.command == "run":
+    if args.command == "run" or args.command is None:
         # 加载环境变量
         if args.env_file:
             load_dotenv(args.env_file)
@@ -193,7 +192,7 @@ def main() -> None:
         run_server()
     
     elif args.command == "init":
-        create_env_file(args.env_file)
+        create_env_file(args.env_file or ".env")
     
     elif args.command == "configure-claude":
         configure_mcp_for_claude_desktop(args.config_file)
