@@ -144,6 +144,32 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 
 ## Changelog
 
+### v1.2.0 (2025-06-10)
+
+**New Features in v1.2.0**
+- **SSE Support**: Added `st-mcp-sse` for real-time communication with SeaTunnel MCP via Server-Sent Events (SSE). Corresponding sse branch
+- **UV/Studio Mode**: Added `st-mcp-uv` (or `st-mcp-studio`) to support running the MCP server using the `uv` tool for improved performance and async support. Corresponding to uv branch
+
+#### Example `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "st-mcp-sse": {
+      "url": "http://your-server:18080/sse"
+    },
+    "st-mcp-uv": {
+      "command": "uv",
+      "args": ["run", "seatunnel-mcp"],
+      "env": {
+        "SEATUNNEL_API_URL": "http://127.0.0.1:8080"
+      }
+    }
+  }
+}
+
+```
+
 ### v1.1.0 (2025-04-10)
 
 - **New Feature**: Added `submit-jobs` and `submit-job/upload` tool for batch job submission and Document submission operations

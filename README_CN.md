@@ -199,6 +199,31 @@ npx @modelcontextprotocol/inspector python -m src.seatunnel_mcp
 
 ## 更新日志
 
+### v1.2.0 (2025-06-09)
+**v1.2.0 新功能**
+
+- **SSE 实时通信**：新增 `st-mcp-sse`，支持通过 Server-Sent Events（SSE）协议与 SeaTunnel MCP 实现实时数据推送。 对应sse分支
+- **UV/Studio 模式**：新增 `st-mcp-uv`（或 `st-mcp-studio`），支持通过 `uv` 工具运行 MCP 服务器，提升异步和高性能场景下的运行效率。对应uv分支
+
+#### `claude_desktop_config.json` 配置示例：
+
+```json
+{
+  "mcpServers": {
+    "st-mcp-sse": {
+      "url": "http://your-server:18080/sse"
+    },
+    "st-mcp-uv": {
+      "command": "uv",
+      "args": ["run", "seatunnel-mcp"],
+      "env": {
+        "SEATUNNEL_API_URL": "http://127.0.0.1:8080"
+      }
+    }
+  }
+}
+```
+
 ### v1.1.0 (2025-04-10)
 
 - **新功能**：添加了 `submit-jobs` 和`submit-job/upload` 工具用于批量提交作业 和 文件提交作业
